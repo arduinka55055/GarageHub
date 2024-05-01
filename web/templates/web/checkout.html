@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+    {% include 'web/_nav.html' %}
+{% endblock %}
+
+{% block about %}
+
+
+<div class=" row checkout_div">
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper">
+            <form id="form">
+            <div id="form">
+          
+
+                <div id="shipping-info">
+                    <hr>
+                    <p>Додаткова інформація:</p>
+                    <hr>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="address" placeholder="Адреса..">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control city" type="text" name="city" placeholder="Місто..">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control zip" type="text" name="zipcode" placeholder="Zip code..">
+                    </div>
+                </div>
+            </div>
+                <hr>
+                
+                <input id="form-button" class="btn btn-success btn-block" type="button" value="Продовжити" onclick="window.location.href='/successfully/'">
+
+
+            </form>
+        </div>
+
+        <br>
+        <div  class="box-element hidden" id="payment-info">
+            <small>Paypal Options</small>
+            <div id="paypal-button-container"></div>
+{#                <button id="make-payment">Make Payment</button>#}
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+        <div class="box-element">
+            
+            <hr>
+            <div class="order_sum"><h3>Загальні відомості</h3></div>
+            <h5>Товарів: {{ order.get_cart_items }}</h5>
+            <h5>На суму: {{ order.get_cart_total }} грн.</h5>
+            <hr>
+            {% for item in items %}
+            
+            <div class="cart-row">
+
+                {% with item.product.images.first as product_image %}           
+                <a href="{% url 'product_detail' item.product.id %}">
+                    <img src="{{ product_image.image.url }}" alt="{{ item.product.name }}">
+                </a>
+                {%endwith%}
+
+                
+                <div style="flex:2"><p>{{ item.product.name }}</p></div>
+                <div style="flex:1"><p>${{ item.product.price }}</p></div>
+                <div style="flex:1"><p>{{ item.quantity }}</p></div>
+            </div>
+            {% endfor %}
+       
+        </div>
+    </div>
+</div>
+{% endblock %}

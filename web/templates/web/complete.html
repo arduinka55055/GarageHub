@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+    {% include 'web/_nav.html' %}
+{% endblock %}
+
+{% block about %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/success.css' %}">
+    <div class="success-page">
+        <div class="success-container">
+            <h2 class="success-heading">Успішно!</h2>
+            <p class="success-message">Товари успішно замовлено. Дякуємо, що скористалися нашими послугами.</p>
+            <hr>
+            <p class="success-contact">Якщо у вас виникнуть будь-які питання, будь ласка, <a href="{% url 'shop' %}" class="delayed-link">зв'яжіться з нами</a>.</p>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(function() {
+                document.body.style.transition = "opacity 0.5s";
+                document.body.style.opacity = "0";
+                var url = document.querySelector(".delayed-link").getAttribute("href");
+                setTimeout(function() {
+                    window.location.href = url;
+                }, 500);
+            }, 3000);
+        });
+    </script>
+{% endblock %}

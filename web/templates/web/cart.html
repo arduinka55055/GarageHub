@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+    {% include 'web/_nav.html' %}
+{% endblock %}
+
+{% block about %}
+
+
+    <div class="container ">
+
+
+
+        <div class="row container cart-container-top">
+           
+          
+                {% include 'web/cab/cab-sidebar.html' %}
+            
+            <div class="col-md-8 cart-content-container ">
+                <h2 class="cab-content-heading">Ваша корзина</h2>
+                <div >
+                    <table class="table">
+                        <tr>
+                            <th><h5>Всього товарів: <strong>{{ order.get_cart_items }}</strong></h5></th>
+                            <th><h5>На суму:<strong> ₴{{ order.get_cart_total }}</strong></h5></th>
+                            
+                            <th><button class="button-design"><a  href="{% url 'checkout' %}" ><span class="text-off">ОФОРМИТИ</span></a></button></th>
+                        </tr>
+                    </table>
+                </div>
+            </div> 
+                
+        </div>
+        
+
+            <div class="row">
+                <div class="col-lg-12">
+                  
+                    <br>
+                    <div class="box-element">
+                        {% for item in items %}
+
+
+                            <div class="cart-row row">
+                               
+                                <div class="col-md-8 product_div">
+                                    <a href="{% url 'product_detail' item.product.id %}"><p class="product_name">{{ item.product.name }}</p></a>
+                                    <p class="info-item"><strong>Ціна:</strong> {{ item.product.price }} грн.</p>
+                                    <p class="info-item"><strong>Виробник:</strong> {{ item.product.manufacturer }}</p>
+                                    <p class="info-item"><strong>Модель:</strong> {{ item.product.model_car.name }}</p>
+                                    <p class="info-item">{{ product.description|linebreaksbr }}</p>
+                                    <strong>Категорії:</strong>
+                                    {% for category in item.product.category.all %}
+                                        {{ category }}
+                                    {% endfor %}
+                                    <div style="flex:1"><p>₴{{ item.get_total }}</p></div>
+                                    <div style="flex:1"><p>Кількість: {{ item.quantity }}</p></div>
+                                </div>
+
+
+                                <div class="col-md-4 cart-description-right">
+
+                            
+                                     <div  >
+                                        {% with item.product.images.first as product_image %}
+                                            <a class="a_kartinka" href="{% url 'product_detail' item.product.id %}">
+                                                <img class="img_koshik" src="{{ product_image.image.url }}" alt="{{ item.product.name }}">
+                                            </a>
+                                        {% endwith %}
+                                    </div>
+
+                                    
+                                    <div class="quantity" >
+                                        <button data-product="{{ item.product.id }}" data-action="add" class="buttons chg-quantity update-cart" ><img  src="{% static '/img/up-arrow.png' %}"></button>
+                                        <button data-product="{{ item.product.id }}" data-action="remove" class="buttons chg-quantity update-cart" > <img src="{% static '/img/down.png' %}">
+                                        </button>
+                                    </div>
+
+                            
+                                    
+
+                                   
+                                </div>
+
+
+
+
+                            </div>
+
+
+
+
+
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    export function setBasketLocalStorage(basket) {
+  const basketCount = document.querySelector('.basket_count');
+
+  localStorage.setItem('basket', JSON.stringify(basket));
+  basketCount.textContent = basket.length;
+}
+</script>
+
+    <script>
+        
+    var updateBtns = document.getElementsByClassName('update-cart')
+
+for(var i = 0; i < updateBtns.length; i++){
+    updateBtns[i].addEventListener('click',function(){
+        var productId = this.dataset.product
+        var action = this.dataset.action
+        console.log(productId,action)
+
+        console.log('USER:',user)
+        if(user==='AnonymousUser'){
+            console.log('Not logged in')
+        }else {
+            updateUserOrder(productId, action)
+        }
+    })
+}
+
+
+function updateUserOrder(productId,action){
+    console.log('User is logged in, sending data')
+
+    var url = '/update_item/'
+
+
+    fetch(url,{
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json',
+            'X-CSRFToken':csrftoken,
+        },
+        body:JSON.stringify({'productId':productId,'action':action})
+    })
+        .then((response) =>{
+            return response.json()
+        })
+
+        .then((data) =>{
+            console.log('data:',data)
+            location.reload()
+        })
+}
+
+
+    </script>
+{% endblock %}

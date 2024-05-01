@@ -1,0 +1,112 @@
+{% load static %}
+<link href="{% static 'css/responsive.css' %}" rel="stylesheet" type="text/css" />
+
+<nav class="main-nav-outer" id="test">
+  <!--main-nav-start-->
+  <div class="container navbar">
+    <ul class="main-nav">
+      {% if request.path == '/' %}
+      <li><a href="#header">На головну</a></li>
+      {% else %}
+      <li><a class="delayed-link-home" href="{% url 'index' %}">На головну</a></li>
+      {% endif %}
+      
+      <li><a class="delayed-link" href="{% url 'shop' %}">Магазин</a></li>
+
+      {% if request.path == '/' %}
+      <li class="small-logo"><a href="#header"><img src="{% static '/img/small-logo.svg' %}" alt=""/></a></li>
+      {% else %}
+      <li class="small-logo"><a class="delayed-link-home" href="{% url 'index' %}"><img src="{% static '/img/small-logo.svg' %}" alt=""/></a></li>
+      {% endif %}
+      
+      {% if request.path == '/' %}
+      <li><a href="#footer">Контакти</a></li>
+      {% else %}
+      <li><a class="delayed-link-footer" href="{% url 'index' %}">Контакти</a></li>
+      {% endif %}
+      
+      {% if request.user.is_authenticated %}
+      <li><a class="delayed-link" href="{% url 'cab' %}">Кабінет</a></li>
+      {% if request.user.is_superuser %}
+      <li><a class="delayed-link" href="{% url 'admin:index' %}">add_product</a></li>
+      {% else %}
+        
+        <li><a class="delayed-link" href="{% url 'cart' %}">Кошик</a></li>
+        
+        
+      {% endif %}
+      {% else %}
+      <li><a class="delayed-link-home" href="{% url 'register' %}">Реєстрація</a></li>
+      <li><a class="delayed-link-home" href="{% url 'login' %}">Увійти</a></li>
+      {% endif %}
+
+      
+
+
+    </ul>
+    <a class="res-nav_click" href="#"><i class="fa fa-bars"></i></a>
+  </div>
+</nav>
+
+
+
+
+<script > //скріпти для затемнення між переходами
+document.querySelectorAll(".delayed-link-footer").forEach(function(link) {
+    link.addEventListener("click", function(event) {
+        event.preventDefault(); // Забороняємо стандартну дію посилання
+        document.body.style.transition = "opacity 0.5s";
+        document.body.style.opacity = "0";
+        var url = this.getAttribute("href"); 
+        setTimeout(function() {
+            window.location.href = url + "#footer"; 
+        }, 500); 
+    });
+});
+//для контактів (через class="delayed-link-footer")
+
+
+document.querySelectorAll(".delayed-link-home").forEach(function(link) { 
+    link.addEventListener("click", function(event) {
+        event.preventDefault(); // Забороняємо стандартну дію посилання
+        document.documentElement.style.backgroundColor = "rgb(21, 21, 21)";
+        document.body.style.transition = "opacity 0.5s";
+        document.body.style.opacity = "0";
+        var url = this.getAttribute("href"); //отримуємо посилання
+        setTimeout(function() {
+            window.location.href = url; 
+        }, 500); 
+    });
+});
+//для головної (через class="delayed-link-home")
+
+
+document.querySelectorAll(".delayed-link").forEach(function(link) { 
+    link.addEventListener("click", function(event) {
+        event.preventDefault(); // Забороняємо стандартну дію посилання
+        document.body.style.transition = "opacity 0.5s";
+        document.body.style.opacity = "0";
+        var url = this.getAttribute("href"); //отримуємо посилання
+        setTimeout(function() {
+            window.location.href = url; 
+        }, 500); 
+    });
+});
+//для всього остального(через class="delayed-link")
+//бо якщо встановлювати один і той же ідентифікатор для декількох елементів, 
+//JavaScript буде вибирати тільки перший знайдений елемент з цим ідентифікатором.)
+</script> 
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var mainNav = document.querySelector('.main-nav');
+        document.addEventListener('click', function(event) {
+            // Перевіряємо, чи натиснуто на пусте місце та чи відкритий навбар
+            if (!event.target.closest('.main-nav') && mainNav.style.display === 'block') {
+                mainNav.style.display = 'none'; // Закриваємо навбар
+            }
+        });
+    });
+    </script>
+    <!-- для закриття навбару при кліку на пусте місце -->    

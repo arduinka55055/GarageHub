@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+    {% include 'web/_nav.html' %}
+{% endblock %}
+
+{% block about %}
+    <div class="container ">
+    <div class="row container cab-container">
+        <!-- <div class="row div-cab-colobaration"> -->
+            {% include 'web/cab/cab-sidebar.html' %}
+            <div class="col-md-8">
+                <div id="content_display" class="cab-content-display">
+                    <h2 class="cab-content-heading">Ваш кабінет</h2>
+                    <div>
+
+                        <p><strong>Ім'я користувача:</strong> {{ customer.name }}</p>
+                    
+                        <p><strong>Логін:</strong> {{ request.user.username }}</p>
+                     
+                        <p><strong>Електронна пошта:</strong> {{ customer.email }}</p>
+                      
+                        <p><strong>Дата реєстрації:</strong> {{ customer.date_reg }}</p>
+
+
+
+
+
+                      </div>
+                      
+                </div>
+            </div>
+        <!-- </div> -->
+        </div>
+    </div>
+{% endblock %}

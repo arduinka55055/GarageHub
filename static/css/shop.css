@@ -1,0 +1,317 @@
+/* Стилі для всіх товарів */
+.towar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: auto;
+}
+
+.label-category {
+  color: #555555;
+  list-style-type: none;
+}
+
+/* Стилі для блоку товару */
+.product-card {
+  padding: 15px;
+  margin-bottom: 20px;
+  max-width: 300px;
+  border: 1px solid #cacaca;
+  border-radius: 5px;
+  height: 65vh;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.product-card .product-body {
+  flex: 1;
+  margin: 10px;
+}
+
+/* Стилі для зображення товару */
+.product-img-top {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 10px;
+  object-fit: contain;
+}
+
+.product-img-top-container {
+  max-height: 20vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 200px;
+}
+
+/* Стилі для тіла товару */
+.product-body {
+  padding: 10px 0;
+  overflow: hidden;
+  position: relative; /* Додали позиціонування */
+}
+
+/* Стилі для заголовка товару */
+.product-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Зміна кольору кнопки при наведенні */
+.more_info:hover {
+  background-color: #45a049;
+}
+.more_info {
+  height: 5vh;
+  background-color: #4caf50;
+  color: white;
+  padding: 1vh 2vw;
+  border: none;
+  border-radius: 4px; /* Залишаємо радіус закруглення 4px */
+  cursor: pointer;
+  margin: 15px 0;
+  transition: background-color 0.3s ease;
+}
+
+/* Стилі для кнопки сортування */
+.button-submit {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+  transition: background-color 0.3s ease;
+}
+
+/* Зміна кольору кнопки при наведенні */
+.button-submit:hover {
+  background-color: #45a049;
+}
+
+/* Стилі для заголовків */
+h2 {
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.text-limit-1line {
+  white-space: nowrap; /* Запобігає перенесенню тексту */
+  overflow: hidden; /* Сховує вибігаючий текст */
+  text-overflow: ellipsis; /* Додає місце для троєкрапки, якщо текст не поміщається */
+}
+
+.sort-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.category-filter,
+.sort-by-filter,
+.year-filter,
+.submit-button {
+  flex: 1 1 100%;
+  margin-bottom: 20px;
+}
+
+.checkbox-container {
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  user-select: none;
+}
+
+
+ul{
+  list-style-type: none;
+}
+.check{
+  list-style-type: none;
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: #4caf50;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.label-category {
+  margin-left: 45px;
+}
+
+.button-submit {
+  background-color: #4caf50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button-submit:hover {
+  background-color: #45a049;
+}
+
+@media screen and (min-width: 768px) {
+  .category-filter,
+  .sort-by-filter,
+  .year-filter,
+  .submit-button {
+    flex: 1 1 30%;
+    margin-bottom: 0;
+  }
+}
+
+@media only screen and (min-width: 1478px) {
+  .product-img-top {
+    width: 19vw;
+    height: auto;
+    min-height: 15vh;
+    max-height: 15vh;
+  }
+  .product-card {
+    max-height: 32vw;
+  }
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1477px) {
+  .product-img-top {
+    width: 19vw;
+    height: auto;
+    min-height: 15vh;
+    max-height: 15vh;
+  }
+  .product-card {
+    min-height: 40vw;
+    max-height: 42vw;
+  }
+}
+
+@media only screen and (min-width: 1021px) and (max-width: 1199px) {
+  .product-img-top {
+    width: 26vw;
+    height: 16vw;
+    max-height: 30vw; /* w так і має бути*/
+  }
+  .product-card {
+    display: flex;
+    min-height: 43vw;
+    max-height: 45vw;
+  }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1020px) {
+  .product-img-top {
+    width: 26vw;
+    height: 16vw;
+    max-height: 30vw; /* w так і має бути*/
+  }
+  .product-card {
+    display: flex;
+    min-height: 45vw;
+    max-height: 55vh;
+  }
+}
+
+@media only screen and (min-width: 956px) and (max-width: 991px) {
+  .product-img-top {
+    width: 26vw;
+    height: 18vw;
+    max-height: 30vw; /* w так і має бути*/
+  }
+  .product-card {
+    display: flex;
+    min-height: 50vw;
+  }
+}
+
+@media only screen and (min-width: 690px) and (max-width: 955px) {
+  .product-img-top {
+    width: 26vw;
+    height: 18vh;
+    margin-bottom: 10px;
+  }
+  .product-card {
+    height: 80vh;
+    min-height: 50vw;
+    max-height: 60vh;
+  }
+}
+
+@media only screen and (min-width: 480px) and (max-width: 689px) {
+  .product-img-top {
+    margin-top: 15px;
+    width: 26vw;
+    height: 18vh;
+    margin-bottom: 10px;
+  }
+  .product-card {
+    height: 80vh;
+    min-height: 50vw;
+    max-height: 60vh;
+  }
+}
+
+@media only screen and (max-width: 479px) {
+  .product-img-top {
+    margin-top: 120px;
+    margin-bottom: 15px;
+    width: auto;
+    max-width: 40vw;
+    max-width: 15vh;
+    margin-bottom: 10px;
+  }
+  .product-card {
+    height: 80vh;
+    min-height: 50vw;
+    max-height: 50vh;
+  }
+}

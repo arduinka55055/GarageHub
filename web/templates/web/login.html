@@ -1,0 +1,28 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block main %}
+<div class="custom-login-background">
+  <div class="all-site">
+    <h1 class="custom-login-title">Вхід до GarageHub</h1>
+    <div class="custom-container-log">
+      <div class="custom-login-form">
+        <form method="post">
+          {% csrf_token %}
+          <div class="custom-form-group">
+            <label for="username">Логін:</label>
+            {{ form.username }}
+          </div>
+          <div class="custom-form-group">
+            <label for="password">Пароль:</label>
+            {{ form.password }}
+          </div>
+          <button class="custom-btn custom-btn-primary" type="submit">Увійти</button>
+        </form>
+
+        <a href="{% url 'password_reset' %}" class="reset_pass">Не пам'ятаю пароль</a>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

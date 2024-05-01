@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+    {% include 'web/_nav.html' %}
+{% endblock %}
+
+{% block about %}
+    <div class="container cab-container">
+        <div class="row">
+            {% include 'web/cab/cab-sidebar.html' %}
+            <div class="col-md-8">
+                <div id="content_display" class="cab-content-display">
+                    <h2 class="cab-content-heading">Your Orders</h2>
+                    <p class="cab-content-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et felis turpis. Vestibulum ac velit purus. Sed vitae neque nec ipsum lacinia tristique.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

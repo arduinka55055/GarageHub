@@ -1,0 +1,45 @@
+{% extends 'base.html' %} {% load static %} {% block main %}
+<div class="custom-register-background">
+  <div class="all-site">
+    <h1 class="custom-register-title">
+      Реєстрація<br />
+      <span style="font-size: 0.5em"
+        >Переконайтеся, що у Вас english розкладка</span
+      >
+    </h1>
+
+    <div class="custom-container-reg">
+      <div class="custom-register-form">
+        <form method="post">
+          {% csrf_token %}
+          <div class="custom-form-group">
+            <label for="login">Логін:</label>
+            {{ form.login }}
+          </div>
+          <div class="custom-form-group">
+            <label for="name">Ім'я:</label>
+            {{ form.name }}
+          </div>
+
+          <div class="custom-form-group">
+            <label for="email">Gmail:</label>
+            {{ form.email }}
+          </div>
+
+          <div class="custom-form-group">
+            <label for="password1">Пароль:</label>
+            {{ form.password1 }}
+          </div>
+          <div class="custom-form-group">
+            <label for="password2">Підтвердіть пароль:</label>
+            {{ form.password2 }}
+          </div>
+          <button class="custom-btn custom-btn-primary" type="submit">
+            Зареєструватись
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

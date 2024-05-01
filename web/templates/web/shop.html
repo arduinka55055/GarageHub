@@ -1,0 +1,182 @@
+{% extends 'base.html' %} 
+{% load static %}
+
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,800italic,700italic,600italic,400italic,300italic,800,700,600" rel="stylesheet" type="text/css">
+<link href="{% static 'css/shop.css' %}" rel="stylesheet" type="text/css">
+
+{% block main %}
+  {% include 'web/_nav.html' %}
+
+  <div class="container mt-5">
+    <div class="row">      
+      <div class="col-md-3"> 
+        <h2>Категорії</h2>
+        <form class="sort-form" method="get" id="filter-form">
+          {% csrf_token %}
+          <ul class="check">
+            {% for category in categories %}
+              <li class="check">
+                <label class="checkbox-container">
+                  <input type="checkbox" id="category-{{ category.id }}" name="categories" value="{{ category.id }}" {% if category.id in selected_categories %}checked{% endif %}>
+                  <span class="checkmark"></span>
+                  <span class="label-category">{{ category.name }}</span>
+                </label>
+              </li>
+            {% endfor %}
+          </ul>
+          
+          <h2>Сортувати за:</h2>
+          <select name="sort_by" class="form-control" id="sort-by">
+            <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Назвою</option>
+            <option value="price" {% if sort_by == 'price' %}selected{% endif %}>Ціною</option>
+            <option value="manufacturer" {% if sort_by == 'manufacturer' %}selected{% endif %}>Виробником</option>
+            <option value="model_car__name" {% if sort_by == 'model_car__name' %}selected{% endif %}>Моделлю авто</option>
+            <option value="year_from" {% if sort_by == 'year_from' %}selected{% endif %}>Роком випуску (за зростанням)</option>
+          </select>
+       
+          {% csrf_token %}
+          <input type="text" name="year" id="year" placeholder="Рік випуску">
+
+
+         
+          
+            <button type="submit" class="button-submit" id="apply-sorting">Знайти</button>
+     
+
+
+
+
+      </form>
+      </div>
+      <div class="col-md-9">
+        <h1>Товари</h1>
+        <div class="towar" id="products-container">
+          {% for product in products %}
+            <div class="col-md-3 mb-4 product {% for category in product.category.all %}category-{{ category.id }}{% endfor %}">
+              <div class="product-card">
+                <div class="product-img-top-container">
+                  {% if product.images.exists %}
+                    {% with product.images.first as product_image %}
+                      <a href="{% url 'product_detail' product.id %}">
+                        <img class="product-img-top" src="{{ product_image.image.url }}" alt="{{ product.name }}">
+                      </a>
+                    {% endwith %}
+                  {% else %}
+                    <p>No image available</p>
+                  {% endif %}
+                </div>
+                <div class="product-body">
+                  <h5 class="product-title text-limit-1line">{{ product.name }}</h5>
+                  <p class="text-limit-1line" ><strong>Ціна:</strong> {{ product.price }} грн.</p>
+                  <p class="text-limit-1line" ><strong>Виробник:</strong> {{ product.manufacturer }}</p>
+                  <p class="text-limit-1line" ><strong>Модель:</strong> {{ product.model_car.name }}</p>
+                  <p class="text-limit-1line" >
+                    <strong>Категорії:</strong>
+                    {% for category in product.category.all %}
+                      {{ category }}
+                    {% endfor %}
+                  </p>
+                  {% if product.available %}
+                    <p class="text-success">Є в наявності</p>
+                  {% else %}
+                    <p class="text-danger">Немає в наявності</p>
+                  {% endif %}
+                  <div>
+                    <a href="{% url 'product_detail' product.id %}">
+                      <button class="more_info">Деталі</button>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    
+   function save_data(){
+    let fields = document.querySelectorAll("input, select")
+    let saved_fields = []
+    fields.forEach(x => {
+        saved_fields.push({
+            key: x.id,
+            value: (x.type == "checkbox")? x.checked : x.value
+        })
+    })
+    localStorage.setItem("saved_data", JSON.stringify(saved_fields))
+ }
+
+ function show_saved_data(){
+     JSON.parse(localStorage.getItem("saved_data")).forEach(x => {
+         let el = document.getElementById(x.key);
+         if(el != null){
+         if(el.type == "checkbox" )
+            el.checked = x.value;
+         else
+           el.value = x.value;
+         }
+     });
+ }
+
+    document.addEventListener('DOMContentLoaded', function() {
+     
+      const filterForm = document.getElementById('filter-form');
+      const sortBySelect = document.getElementById('sort-by');
+      const hiddenSortBy = document.getElementById('sort-by-hidden');
+      const yearFromInput = document.getElementById('year-from');
+      const yearToInput = document.getElementById('year-to');
+      
+      // Встановлюємо вибране значення сортування після перезавантаження сторінки
+      const selectedValue = hiddenSortBy?.value || 'name';
+      sortBySelect.value = selectedValue;
+
+      // Зберігаємо вибране значення сортування при зміні
+      sortBySelect.addEventListener('change', function() {
+        if (hiddenSortBy != null)
+        hiddenSortBy.value = sortBySelect.value;
+      });
+
+      // Застосовуємо сортування при натисканні кнопки
+      document.getElementById('apply-sorting').addEventListener('click', function(event) {
+        event.preventDefault();
+        if (hiddenSortBy != null)
+        hiddenSortBy.value = sortBySelect.value;
+        save_data();
+        filterForm.submit();
+      });
+
+      // Додаємо обробник подій для фільтрації за роками
+      yearFromInput?.addEventListener('input', filterProducts);
+      yearToInput?.addEventListener('input', filterProducts);
+
+      function filterProducts() {
+        const yearFrom = yearFromInput.value.trim();
+        const yearTo = yearToInput.value.trim();
+
+        // Додаємо значення років до параметрів форми
+        const formData = new FormData(filterForm);
+        formData.set('year_from', yearFrom);
+        formData.set('year_to', yearTo);
+
+        // Відправляємо форму
+        fetch(filterForm.getAttribute('action'), {
+          method: filterForm.getAttribute('method'),
+          body: formData
+        })
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('products-container').innerHTML = html;
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      } 
+      show_saved_data();
+    })
+    ;
+  </script>
+{% endblock %}
