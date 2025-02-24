@@ -136,7 +136,7 @@ CACHES = {
 }
 
 
-ALLOWED_HOSTS = ['26.148.162.209','192.168.50.104','26.148.162.209',  'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['26.148.162.209','192.168.50.104','26.148.162.209','shop.sudohub.dev',  'localhost', '127.0.0.1', '195.12.56.83', '192.168.0.208']
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
