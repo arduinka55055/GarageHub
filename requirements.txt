@@ -9,3 +9,4 @@ sqlparse
 typing_extensions
 urllib3
 Pillow
+gunicorn

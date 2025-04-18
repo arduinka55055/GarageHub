@@ -1,17 +1,46 @@
-version: '3'
-
 services:
   web:
     build: .
     ports:
-      - "8000:8000"
+      - "80:80"
     volumes:
       - .:/app
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn myservice.wsgi:application --bind [::]:80
+    networks:
+      mynetworklabtest:
+        ipv6_address: your:ipv6:prefix::2
 
-  #db:
-  #  image: postgres
-  #  environment:
-  #    POSTGRES_DB: myservice
-  #    POSTGRES_USER: myuser
-  #    POSTGRES_PASSWORD: mypassword
+  db:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./custom_postgres:/etc/postgresql/conf.d
+    command: >
+      -c config_file=/etc/postgresql/conf.d/postgresql.conf
+    networks:
+      mynetworklabtest:
+        ipv6_address: your:ipv6:prefix::3
+
+
+networks:
+  mynetworklabtest:
+    driver: bridge
+    enable_ipv6: true
+
+    driver_opts:
+      com.docker.network.bridge.name: myipv6bridge
+      com.docker.network.bridge.enable_ip_masquerade: "false"
+      com.docker.network.enable_ipv4: "false"
+      # IMPORTANT! Disable IPv6 NAT (NAT66)
+      com.docker.network.bridge.gateway_mode_ipv6: 'routed'
+    ipam:
+      driver: default
+      config:
+        - subnet: your:ipv6:prefix::/64
+          gateway: your:ipv6:prefix::1
