@@ -1,14 +1,18 @@
 services:
-  web:
-    build: .
+
+  nginx:
+    image: nginx:alpine
     ports:
       - "80:80"
     volumes:
-      - .:/app
-    command: gunicorn myservice.wsgi:application --bind [::]:80
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./static:/static:ro
+      - ./media:/mediafiles:ro
+    depends_on:
+      - web
     networks:
       mynetworklabtest:
-        ipv6_address: your:ipv6:prefix::2
+        ipv6_address: 2a01:d0:a6c9:3161::2
 
   db:
     image: postgres:13-alpine
@@ -25,8 +29,23 @@ services:
       -c config_file=/etc/postgresql/conf.d/postgresql.conf
     networks:
       mynetworklabtest:
-        ipv6_address: your:ipv6:prefix::3
+        ipv6_address: 2a01:d0:a6c9:3161::3
 
+  web:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - .:/app
+      - static_volume:/static:ro
+      - media_volume:/media:ro
+    networks:
+      mynetworklabtest:
+        ipv6_address: 2a01:d0:a6c9:3161::4
+
+volumes:
+  static_volume:
+  media_volume:
 
 networks:
   mynetworklabtest:
@@ -41,6 +60,6 @@ networks:
       com.docker.network.bridge.gateway_mode_ipv6: 'routed'
     ipam:
       driver: default
-      config:
-        - subnet: your:ipv6:prefix::/64
-          gateway: your:ipv6:prefix::1
+      config: 
+        - subnet: 1111:2222:3333:4444::/64
+          gateway: 1111:2222:3333:4444::1

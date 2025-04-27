@@ -1,1 +1,3 @@
 postgres_data
+*.pyc
+__pycache__
